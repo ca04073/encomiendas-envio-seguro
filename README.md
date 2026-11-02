@@ -1,5 +1,5 @@
 ---
-proyecto: "{{PROJECT_NAME}}"
+proyecto: "encomiendas-envio-seguro"
 tipo: "Plantilla Base / Repositorio Modelo"
 entorno_principal: "Podman / OCI Containers"
 arquitectura: "Separación Modular / Staging -> Main"
@@ -14,7 +14,7 @@ tags:
   - podman
 ---
 
-# 🚀 {{PROJECT_NAME}}
+# 🚀 encomiendas-envio-seguro
 
 > [!NOTE]
 > **REPOSITORIO PLANTILLA (TEMPLATE):**  
@@ -34,7 +34,7 @@ tags:
 
 ## ⚡ 1. Resumen del Sistema
 
-{{PROJECT_DESCRIPTION}}
+Proyecto final ADB135
 
 Principios del entorno:
 1. **Contenedorización Agnóstica:** Listo para compilar y ejecutarse sin fricción con **Podman** o **Docker** mediante definiciones estándar OCI.
@@ -115,8 +115,8 @@ Principios del entorno:
 1. Clonar el repositorio y entrar en la carpeta del proyecto:
     
     ```bash
-    git clone https://github.com/{{GITHUB_OWNER}}/{{PROJECT_NAME}}.git
-    cd {{PROJECT_NAME}}
+    git clone https://github.com/ca04073/encomiendas-envio-seguro.git
+    cd encomiendas-envio-seguro
     ```
     
 2. Preparar el archivo de variables de entorno:
@@ -130,7 +130,7 @@ Principios del entorno:
 Compilar la imagen localmente:
 
 ```bash
-podman build -t {{PROJECT_NAME}}:local .
+podman build -t encomiendas-envio-seguro:local .
 ```
 
 Levantar el entorno con compose:
@@ -150,11 +150,11 @@ Para utilizar directamente los artefactos generados por el pipeline de integraci
 
 ```bash
 # Versión de staging (rama develop)
-podman pull ghcr.io/{{GITHUB_OWNER}}/{{PROJECT_NAME}}:staging
+podman pull ghcr.io/ca04073/encomiendas-envio-seguro:staging
 
 # Versión de producción (rama main)
-podman pull ghcr.io/{{GITHUB_OWNER}}/{{PROJECT_NAME}}:latest
+podman pull ghcr.io/ca04073/encomiendas-envio-seguro:latest
 ```
 
 ---
-> **Mantenimiento y Autoría:** @{{GITHUB_OWNER}}
+> **Mantenimiento y Autoría:** @ca04073

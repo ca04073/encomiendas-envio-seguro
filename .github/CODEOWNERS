@@ -16,7 +16,7 @@
 # Por defecto, todo cambio en cualquier archivo del repositorio requiere la
 # revisión y aprobación del propietario principal o del equipo de arquitectura.
 
-*                                               @{{GITHUB_OWNER}}
+*                                               @ca04073
 
 # ------------------------------------------------------------------------------
 # 🔒 INFRAESTRUCTURA, CONFIGURACIÓN Y PIPELINES (CI/CD)
@@ -24,26 +24,26 @@
 # Secciones críticas que controlan la compilación OCI y las acciones de automatización.
 # Evita modificaciones accidentales que rompan los pipelines de integración continua.
 
-/.github/workflows/                             @{{GITHUB_OWNER}}
-/Dockerfile                                     @{{GITHUB_OWNER}}
-/compose.yaml                                   @{{GITHUB_OWNER}}
+/.github/workflows/                             @ca04073
+/Dockerfile                                     @ca04073
+/compose.yaml                                   @ca04073
 
 # ------------------------------------------------------------------------------
 # 📑 GESTIÓN DE CONFIGURACIÓN Y REGLAS DE REPOSITORIO
 # ------------------------------------------------------------------------------
 # Archivos que alteran el gobierno de la comunidad, el linteado o el control de acceso.
 
-/.github/CODEOWNERS                             @{{GITHUB_OWNER}}
-/.github/PULL_REQUEST_TEMPLATE.md               @{{GITHUB_OWNER}}
-/.github/ISSUE_TEMPLATE/                        @{{GITHUB_OWNER}}
-/.gitignore                                     @{{GITHUB_OWNER}}
+/.github/CODEOWNERS                             @ca04073
+/.github/PULL_REQUEST_TEMPLATE.md               @ca04073
+/.github/ISSUE_TEMPLATE/                        @ca04073
+/.gitignore                                     @ca04073
 
 # ------------------------------------------------------------------------------
 # 📝 DOCUMENTACIÓN GENERAL DEL PROYECTO
 # ------------------------------------------------------------------------------
 # Si en tu flujo de trabajo cuentas con un equipo de documentación o Technical Writers,
-# puedes cambiar `*@{{GITHUB_OWNER}}` por un equipo específico (ej. `@mi-organizacion/tech-writers`).
+# puedes cambiar `*@ca04073` por un equipo específico (ej. `@mi-organizacion/tech-writers`).
 
-/README.md                                      @{{GITHUB_OWNER}}
-/BACKLOG.md                                     @{{GITHUB_OWNER}}
-/CHANGELOG.md                                   @{{GITHUB_OWNER}}
+/README.md                                      @ca04073
+/BACKLOG.md                                     @ca04073
+/CHANGELOG.md                                   @ca04073

@@ -1,5 +1,5 @@
 {
-  "name": "{{PROJECT_NAME}} - DevContainer",
+  "name": "encomiendas-envio-seguro - DevContainer",
 
   // Reutiliza el Dockerfile de la raíz del proyecto
   "build": {
@@ -24,7 +24,7 @@
   },
 
   // Puertos del contenedor expuestos al host
-  "forwardPorts": [{{CONTAINER_PORT}}],
+  "forwardPorts": [8080],
 
   // Comandos que se ejecutan automáticamente al inicializar el contenedor
   "postCreateCommand": "chmod +x .githooks/* 2>/dev/null || true && git config core.hooksPath .githooks",
