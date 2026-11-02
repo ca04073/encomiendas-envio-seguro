@@ -1,0 +1,34 @@
+{
+  "name": "{{PROJECT_NAME}} - DevContainer",
+
+  // Reutiliza el Dockerfile de la raíz del proyecto
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": ".."
+  },
+
+  // Extensiones universales recomendadas dentro del contenedor
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.formatOnSave": true
+      },
+      "extensions": [
+        "editorconfig.editorconfig",
+        "eamodio.gitlens",
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml"
+      ]
+    }
+  },
+
+  // Puertos del contenedor expuestos al host
+  "forwardPorts": [{{CONTAINER_PORT}}],
+
+  // Comandos que se ejecutan automáticamente al inicializar el contenedor
+  "postCreateCommand": "chmod +x .githooks/* 2>/dev/null || true && git config core.hooksPath .githooks",
+
+  // Usuario no-root por seguridad
+  "remoteUser": "root"
+}

@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# ====================================================================
+# 🪝 GIT HOOK: Pre-Commit Security & Hygiene Guard
+# Ubicación: .githooks/pre-commit
+# ====================================================================
+
+# Colores para salida de terminal
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+echo -e "${YELLOW}🔍 [Git Hook] Ejecutando validaciones previas al commit...${NC}"
+
+# ====================================================================
+# 1. PREVENCIÓN DE ARCHIVOS CONFIDENCIALES (.env)
+# ====================================================================
+FORBIDDEN_FILES=(
+  ".env"
+  "http-client.private.env.json"
+  "id_rsa"
+  "id_ed25519"
+)
+
+for file in "${FORBIDDEN_FILES[@]}"; do
+  if git diff --cached --name-only | grep -E "(^|/)${file}$" > /dev/null; then
+    echo -e "${RED}❌ ERROR: Intento de commitear archivo sensible prohibido: ${file}${NC}"
+    echo -e "${RED}Remuévelo del stage con: git reset HEAD ${file}${NC}"
+    exit 1
+  fi
+done
+
+# ====================================================================
+# 2. BLOQUEO DE COMMITS DIRECTOS EN RAMAS PROTEGIDAS LOCALMENTE
+# ====================================================================
+CURRENT_BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+if [ "$CURRENT_BRANCH" = "main" ]; then
+  echo -e "${RED}❌ ERROR: Está prohibido realizar commits directos en la rama 'main'.${NC}"
+  echo -e "${YELLOW}Crea una rama de feature o cámbiate a 'develop': git checkout -b feature/mi-tarea develop${NC}"
+  exit 1
+fi
+
+# ====================================================================
+# 3. VERIFICACIÓN DE AUDITORÍA CON GITLEAKS (Si está instalado localmente)
+# ====================================================================
+if command -v gitleaks &> /dev/null; then
+  gitleaks protect --staged --verbose --redact
+  if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ ERROR: Gitleaks detectó credenciales o tokens en los cambios en stage.${NC}"
+    exit 1
+  fi
+fi
+
+echo -e "${GREEN}✅ [Git Hook] Validaciones aprobadas con éxito.${NC}"
+exit 0

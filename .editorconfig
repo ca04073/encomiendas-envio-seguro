@@ -1,0 +1,46 @@
+# ====================================================================
+# 🛠️ EDITORCONFIG: Estandarización Universal de Código
+# ====================================================================
+root = true
+
+# ====================================================================
+# 📄 REGLAS GLOBALES
+# ====================================================================
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# ====================================================================
+# 🌐 ECOSISTEMA WEB & MARKDOWN
+# ====================================================================
+[*.md]
+trim_trailing_whitespace = false
+
+[{*.json,*.jsonc}]
+indent_size = 2
+
+# ====================================================================
+# ⚙️ BACKEND & SISTEMAS
+# ====================================================================
+[*.{rs,zig,c,h,cpp,hpp}]
+indent_size = 4
+
+[*.go]
+indent_style = tab
+indent_size = 4
+
+[*.py]
+indent_size = 4
+
+# ====================================================================
+# 🐋 CONTENEDORES Y MANIFIESTOS (Docker, Podman, CI/CD)
+# ====================================================================
+[{Dockerfile,Containerfile}]
+indent_size = 4
+
+[{*.yml,*.yaml}]
+indent_size = 2

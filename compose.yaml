@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "{{PROJECT_NAME}}:local"
+    container_name: "{{PROJECT_NAME}}"
+    ports:
+      - "{{HOST_PORT}}:{{CONTAINER_PORT}}"
+    environment:
+      - PORT={{CONTAINER_PORT}}
+    env_file:
+      - .env
+    restart: unless-stopped

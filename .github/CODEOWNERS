@@ -1,0 +1,49 @@
+# ==============================================================================
+# GOBERNANZA DE CÓDIGO - ARCHIVO DE PROPIEDAD DE CÓDIGO (CODEOWNERS)
+# ==============================================================================
+# Este archivo define las asignaciones automáticas de revisores en GitHub.
+# Cualquier Pull Request que intente modificar las rutas descritas requerirá
+# obligatoriamente la aprobación formal de los revisores o equipos designados.
+#
+# Reglas de sintaxis importantes:
+# - El orden de las líneas importa: las reglas del final anulan a las de arriba.
+# - El usuario asignado debe tener permisos de escritura en el repositorio.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 🚨 REGLA GLOBAL DE GOBERNANZA
+# ------------------------------------------------------------------------------
+# Por defecto, todo cambio en cualquier archivo del repositorio requiere la
+# revisión y aprobación del propietario principal o del equipo de arquitectura.
+
+*                                               @{{GITHUB_OWNER}}
+
+# ------------------------------------------------------------------------------
+# 🔒 INFRAESTRUCTURA, CONFIGURACIÓN Y PIPELINES (CI/CD)
+# ------------------------------------------------------------------------------
+# Secciones críticas que controlan la compilación OCI y las acciones de automatización.
+# Evita modificaciones accidentales que rompan los pipelines de integración continua.
+
+/.github/workflows/                             @{{GITHUB_OWNER}}
+/Dockerfile                                     @{{GITHUB_OWNER}}
+/compose.yaml                                   @{{GITHUB_OWNER}}
+
+# ------------------------------------------------------------------------------
+# 📑 GESTIÓN DE CONFIGURACIÓN Y REGLAS DE REPOSITORIO
+# ------------------------------------------------------------------------------
+# Archivos que alteran el gobierno de la comunidad, el linteado o el control de acceso.
+
+/.github/CODEOWNERS                             @{{GITHUB_OWNER}}
+/.github/PULL_REQUEST_TEMPLATE.md               @{{GITHUB_OWNER}}
+/.github/ISSUE_TEMPLATE/                        @{{GITHUB_OWNER}}
+/.gitignore                                     @{{GITHUB_OWNER}}
+
+# ------------------------------------------------------------------------------
+# 📝 DOCUMENTACIÓN GENERAL DEL PROYECTO
+# ------------------------------------------------------------------------------
+# Si en tu flujo de trabajo cuentas con un equipo de documentación o Technical Writers,
+# puedes cambiar `*@{{GITHUB_OWNER}}` por un equipo específico (ej. `@mi-organizacion/tech-writers`).
+
+/README.md                                      @{{GITHUB_OWNER}}
+/BACKLOG.md                                     @{{GITHUB_OWNER}}
+/CHANGELOG.md                                   @{{GITHUB_OWNER}}
