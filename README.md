@@ -96,6 +96,10 @@ Principios del entorno:
 ├── .gitignore                    # Exclusiones de Git
 ├── BACKLOG.md                    # Listado priorizado de tareas y estimación en días
 ├── CHANGELOG.md                  # Historial detallado de cambios por versión (SemVer)
+├── database/
+│   └── schema.sql                # Esquema inicial de PostgreSQL
+├── docs/
+│   └── Envio-Seguro-Entidades-y-Atributos.pdf # Documentación de entidades y atributos
 ├── compose.yaml                  # Orquestación multicontenedor (compatible con Podman)
 ├── Dockerfile                    # Receta de construcción OCI del contenedor
 └── README.md                     # Documentación general del proyecto
@@ -145,6 +149,8 @@ podman compose up -d
 ### 5.4. Esquema de PostgreSQL
 
 El esquema inicial de la base de datos está en [`database/schema.sql`](database/schema.sql). Este archivo se ejecuta manualmente desde pgAdmin o `psql`; actualmente, `compose.yaml` solo levanta la aplicación y no crea una instancia de PostgreSQL ni ejecuta el script.
+
+La documentación de entidades y atributos se encuentra en [`docs/Envio-Seguro-Entidades-y-Atributos.pdf`](docs/Envio-Seguro-Entidades-y-Atributos.pdf).
 
 > [!WARNING]
 > El script elimina las tablas existentes antes de crearlas (`DROP TABLE ... CASCADE`). Ejecútalo únicamente en una base de desarrollo vacía o cuando puedas borrar intencionalmente sus tablas y datos. No lo ejecutes sobre una base con información que quieras conservar.
