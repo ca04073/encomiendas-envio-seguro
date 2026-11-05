@@ -142,6 +142,13 @@ podman compose up -d
 > [!TIP]
 > Si utilizas **Podman** en Linux en modo _rootless_, no necesitas permisos de superusuario (`sudo`) para interactuar con los contenedores o el orquestador.
 
+### 5.4. Esquema de PostgreSQL
+
+El esquema inicial de la base de datos está en [`database/schema.sql`](database/schema.sql). Este archivo se ejecuta manualmente desde pgAdmin o `psql`; actualmente, `compose.yaml` solo levanta la aplicación y no crea una instancia de PostgreSQL ni ejecuta el script.
+
+> [!WARNING]
+> El script elimina las tablas existentes antes de crearlas (`DROP TABLE ... CASCADE`). Ejecútalo únicamente en una base de desarrollo vacía o cuando puedas borrar intencionalmente sus tablas y datos. No lo ejecutes sobre una base con información que quieras conservar.
+
 ---
 
 ## 📦 6. Descarga de Imágenes desde GHCR
