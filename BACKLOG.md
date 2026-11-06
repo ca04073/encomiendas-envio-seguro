@@ -41,12 +41,23 @@ Usa la siguiente estructura para añadir nuevos ítems al backlog:
   - [ ] Crear archivo `.env.example` con las variables requeridas.
   - [ ] Levantar el proyecto por primera vez sin errores.
 
+### [[ID-002]] Actualización y Mantenimiento de la Documentación del Proyecto
+- **Tipo:** Tarea Técnica
+- **Estado:** ⏳ Por Hacer
+- **Estimación:** 0.5 días
+- **Descripción:** Mantener sincronizada la documentación técnica del repositorio (`README.md`, guías de arquitectura y esquemas) conforme se incorporen nuevos módulos, cambios en la base de datos o ajustes de infraestructura.
+- **Criterios de Aceptación / Tareas:**
+  - [ ] Actualizar `README.md` reflejando la estructura actual de carpetas (`database/`, `docs/`) e instrucciones de despliegue.
+  - [ ] Documentar el proceso de inicialización y ejecución del script `schema.sql` en PostgreSQL.
+  - [ ] Referenciar en la documentación técnica el archivo `Envio-Seguro-Entidades-y-Atributos.pdf`.
+  - [ ] Mantener actualizados los enlaces y variables del repositorio (`ca04073/encomiendas-envio-seguro`).
+
 ---
 
 ## 📈 Prioridad Media (Should Have)
 *Características importantes que aportan valor pero no detienen el lanzamiento.*
 
-### [[ID-002]] Ejemplo de Historia de Usuario
+### [[ID-003]] Ejemplo de Historia de Usuario
 - **Tipo:** Historia de Usuario
 - **Estado:** ⏳ Por Hacer
 - **Estimación:** 2.5 días
@@ -61,7 +72,7 @@ Usa la siguiente estructura para añadir nuevos ítems al backlog:
 ## 💤 Prioridad Baja (Could Have / Won't Have)
 *Mejoras secundarias, refactorizaciones estéticas o ideas para futuras versiones.*
 
-### [[ID-003]] Ejemplo de Optimización o Ajuste
+### [[ID-004]] Ejemplo de Optimización o Ajuste
 - **Tipo:** Mejora
 - **Estado:** ⏳ Por Hacer
 - **Estimación:** 0.5 días
@@ -71,14 +82,16 @@ Usa la siguiente estructura para añadir nuevos ítems al backlog:
 
 ## 📝 Historial de Decisiones
 *Espacio para anotar congelamientos de alcance, cambios de prioridad o notas de arquitectura.*
+- **2026-11-05:** Se añade la tarea `[[ID-002]]` para dar seguimiento a la actualización continua de la documentación técnica y el `README.md`.
 - **2026-10-25:** Creación del backlog inicial a partir del template del repositorio con estimación en días.
 
 ---
 
 ## 🔗 Enlaces de Referencia (Trazabilidad)
 *Reemplaza `usuario` y `repositorio` para vincular tus tareas con GitHub Issues o ramas.*
-*Configurar una sola vez al crear el repositorio a partir del template.**Configurar una sola vez al crear el repositorio a partir del template.*
+*Configurar una sola vez al crear el repositorio a partir del template.*
 
-[ID-001]: https://github.com
-[ID-002]: https://github.com
-[ID-003]: https://github.com
+[ID-001]: https://github.com/ca04073/encomiendas-envio-seguro/issues/1
+[ID-002]: https://github.com/ca04073/encomiendas-envio-seguro/issues/2
+[ID-003]: https://github.com/ca04073/encomiendas-envio-seguro/issues/3
+[ID-004]: https://github.com/ca04073/encomiendas-envio-seguro/issues/4
