@@ -43,14 +43,14 @@ Usa la siguiente estructura para añadir nuevos ítems al backlog:
 
 ### [[ID-002]] Actualización y Mantenimiento de la Documentación del Proyecto
 - **Tipo:** Tarea Técnica
-- **Estado:** ⏳ Por Hacer
+- **Estado:** ✅ Listo
 - **Estimación:** 0.5 días
 - **Descripción:** Mantener sincronizada la documentación técnica del repositorio (`README.md`, guías de arquitectura y esquemas) conforme se incorporen nuevos módulos, cambios en la base de datos o ajustes de infraestructura.
 - **Criterios de Aceptación / Tareas:**
-  - [ ] Actualizar `README.md` reflejando la estructura actual de carpetas (`database/`, `docs/`) e instrucciones de despliegue.
-  - [ ] Documentar el proceso de inicialización y ejecución del script `schema.sql` en PostgreSQL.
-  - [ ] Referenciar en la documentación técnica el archivo `Envio-Seguro-Entidades-y-Atributos.pdf`.
-  - [ ] Mantener actualizados los enlaces y variables del repositorio (`ca04073/encomiendas-envio-seguro`).
+  - [x] Actualizar `README.md` reflejando la estructura actual de carpetas (`database/`, `docs/`) e instrucciones de despliegue.
+  - [x] Documentar el proceso de inicialización y ejecución del script `schema.sql` en PostgreSQL.
+  - [x] Referenciar en la documentación técnica el archivo `Envio-Seguro-Entidades-y-Atributos.pdf`.
+  - [x] Mantener actualizados los enlaces y variables del repositorio (`ca04073/encomiendas-envio-seguro`).
 
 ---
 

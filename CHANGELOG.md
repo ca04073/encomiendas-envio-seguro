@@ -24,6 +24,7 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 *Primera versión estable del proyecto.*
 
 ### Added
+- [ID-002] Actualización de la documentación técnica y badges en [`README.md`](README.md).
 - Esquema relacional inicial de base de datos en PostgreSQL ([`database/schema.sql`](database/schema.sql)) cubriendo estructura de empresa, clientes, encomiendas, tarifas, rutas, pagos, eventos de rastreo, DTE e incidencias.
 - Documento de especificación técnica de modelo de datos ([`docs/Envio-Seguro-Entidades-y-Atributos.pdf`](docs/Envio-Seguro-Entidades-y-Atributos.pdf)).
 
