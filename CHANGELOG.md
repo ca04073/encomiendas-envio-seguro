@@ -16,19 +16,16 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 *Cambios confirmados y mezclados en la rama principal que aún no se han incluido en una versión/tag oficial.*
 
 ### Added
-- [ ] [ID-002] Nueva funcionalidad en desarrollo pendiente de liberar.
-
-### Fixed
-- [ ] [ID-004] Corrección de error menor en la interfaz de usuario.
+- [ ] Incorporación de nuevos módulos o servicios pendientes de liberar.
 
 ---
 
-## - 2026-10-25
+## [1.0.0] - 2026-11-05
 *Primera versión estable del proyecto.*
 
 ### Added
-- [ID-001] Inicialización del proyecto y configuración de la arquitectura base.
-- Documentación inicial incluyendo los archivos `README.md`, `BACKLOG.md` y `CHANGELOG.md`.
+- Esquema relacional inicial de base de datos en PostgreSQL ([`database/schema.sql`](database/schema.sql)) cubriendo estructura de empresa, clientes, encomiendas, tarifas, rutas, pagos, eventos de rastreo, DTE e incidencias.
+- Documento de especificación técnica de modelo de datos ([`docs/Envio-Seguro-Entidades-y-Atributos.pdf`](docs/Envio-Seguro-Entidades-y-Atributos.pdf)).
 
 ---
 
@@ -55,5 +52,5 @@ Cuando liberes una nueva versión, copia este bloque debajo de `## [Unreleased]`
 *Reemplaza `usuario` y `repositorio` por los datos reales de tu proyecto para activar los enlaces.*
 *Configurar una sola vez al crear el repositorio a partir del template.*
 
-[Unreleased]: https://github.com
-: https://github.com
+[Unreleased]: https://github.com/ca04073/encomiendas-envio-seguro/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/ca04073/encomiendas-envio-seguro/releases/tag/v1.0.0
