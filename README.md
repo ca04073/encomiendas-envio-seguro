@@ -1,13 +1,14 @@
 ---
 proyecto: "encomiendas-envio-seguro"
-tipo: "Plantilla Base / Repositorio Modelo"
+tipo: "Sistema de Encomiendas / ADB135"
 entorno_principal: "Podman / OCI Containers"
 arquitectura: "Separación Modular / Staging -> Main"
-estado: "En Desarrollo / Plantilla Lista"
+estado: "En Desarrollo"
 version: "1.0.0"
-ultima_actualizacion: "2026-10-25"
+ultima_actualizacion: "2026-11-05"
 tags:
-  - template
+  - postgresql
+  - database
   - devcontainer
   - github-actions
   - ghcr
@@ -17,18 +18,18 @@ tags:
 # 🚀 encomiendas-envio-seguro
 
 > [!NOTE]
-> **REPOSITORIO PLANTILLA (TEMPLATE):**  
-> Este proyecto define la línea base de desarrollo, gobierno de código y pipelines de integración continua. Emplea un ciclo de dos ramas (`develop` para integración y pruebas, y `main` para entregables estables de producción).
+> **REPOSITORIO DEL SISTEMA DE ENCOMIENDAS:**  
+> Este proyecto implementa el sistema de envíos y encomiendas para la cátedra ADB135, gobernado bajo un modelo de ramas protegidas (`develop` para integración/staging y `main` para entregas estables de producción).
 
 ---
 
 ### 🛡️ Estado del Proyecto y Métricas
 
-![GitHub default branch](https://shields.io)
-![Main Protected](https://shields.io)
-![Container Runtime](https://shields.io)
-![Registry](https://shields.io)
-![License](https://shields.io)
+[![GitHub default branch](https://img.shields.io/badge/default%20branch-develop-blue?logo=git)](https://github.com/ca04073/encomiendas-envio-seguro/tree/develop)
+[![Main Protected](https://img.shields.io/badge/main-protected-green?logo=github)](https://github.com/ca04073/encomiendas-envio-seguro/tree/main)
+[![Database](https://img.shields.io/badge/database-PostgreSQL%2016-336791?logo=postgresql&logoColor=white)](database/schema.sql)
+[![Container Runtime](https://img.shields.io/badge/runtime-Podman%20%7C%20Docker-892CA0?logo=podman&logoColor=white)](compose.yaml)
+[![Registry](https://img.shields.io/badge/registry-GHCR-2088FF?logo=github)](https://github.com/ca04073/encomiendas-envio-seguro/pkgs/container/encomiendas-envio-seguro)
 
 ---
 
