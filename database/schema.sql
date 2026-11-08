@@ -233,7 +233,7 @@ CREATE TABLE metodo_pago (
 
 CREATE TABLE pago (
     id_pago            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    id_guia            INT NOT NULL,
+    id_guia            INT NOT NULL UNIQUE,
     id_cliente_pagador INT NOT NULL,
     id_metodo_pago     INT NOT NULL,
     id_empleado        INT NOT NULL,
@@ -281,7 +281,7 @@ CREATE TABLE servicio_tarifa (
 
 CREATE TABLE documento_dte (
     id_documento        INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    id_guia             INT NOT NULL,
+    id_guia             INT NOT NULL UNIQUE,
     id_tipo_dte         INT NOT NULL,
     id_estado_dte       INT NOT NULL,
     id_cliente_receptor INT NOT NULL,
@@ -356,7 +356,7 @@ CREATE TABLE incidencia (
     CONSTRAINT ck_incidencia_estado
         CHECK (estado IN ('Abierta', 'En proceso', 'Resuelta', 'Cerrada')),
     CONSTRAINT ck_incidencia_prioridad
-        CHECK (prioridad IN ('Baja', 'Media', 'Alta', 'Crítica')),
+        CHECK (prioridad IN ('Baja', 'Media', 'Alta', 'Critica')),
     CONSTRAINT ck_incidencia_fechas
         CHECK (fecha_resolucion IS NULL OR fecha_resolucion >= fecha_reporte)
 );
