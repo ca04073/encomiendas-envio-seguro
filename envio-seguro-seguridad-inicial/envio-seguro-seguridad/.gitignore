@@ -1,0 +1,30 @@
+# Secretos y credenciales
+.env
+.env.*
+!.env.example
+.pgpass
+pgpass.conf
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Respaldos y archivos de datos
+*.backup
+*.dump
+*.sql.gz
+*.tar
+*.wal
+/backups/
+/backup/
+/WAL_ARCHIVE/
+
+# Logs y temporales
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Configuración local de herramientas
+.vscode/
+.idea/
