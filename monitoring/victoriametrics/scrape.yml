@@ -1,0 +1,27 @@
+# =====================================================================
+# Configuración de Scrape para VictoriaMetrics (Prometheus-compatible)
+# Proyecto: Sistema de Encomiendas "Envío Seguro" (ADB135)
+# =====================================================================
+
+global:
+  scrape_interval: 10s
+  scrape_timeout: 5s
+
+scrape_configs:
+  - job_name: 'postgres-primary'
+    static_configs:
+      - targets: ['postgres-exporter-primary:9187']
+        labels:
+          node: 'LXC-01'
+          instance: 'pg-primary'
+          role: 'primary'
+          environment: 'production'
+
+  - job_name: 'postgres-standby'
+    static_configs:
+      - targets: ['postgres-exporter-standby:9187']
+        labels:
+          node: 'LXC-02'
+          instance: 'pg-standby'
+          role: 'standby'
+          environment: 'production'

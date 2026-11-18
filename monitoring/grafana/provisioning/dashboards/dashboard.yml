@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  - name: 'PostgreSQL ADB135'
+    orgId: 1
+    folder: 'Envío Seguro DBA'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

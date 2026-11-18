@@ -48,6 +48,64 @@ services:
       exec docker-entrypoint.sh postgres
       "
 
+  # Exporter de métricas para nodo primario (LXC-01)
+  postgres-exporter-primary:
+    image: quay.io/prometheuscommunity/postgres-exporter:latest
+    container_name: postgres-exporter-primary
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres:${DB_PASSWORD:-postgres}@pg-primary:5432/envio_seguro?sslmode=disable"
+    ports:
+      - "9187:9187"
+    depends_on:
+      pg-primary:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Exporter de métricas para nodo standby (LXC-02)
+  postgres-exporter-standby:
+    image: quay.io/prometheuscommunity/postgres-exporter:latest
+    container_name: postgres-exporter-standby
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres:${DB_PASSWORD:-postgres}@pg-standby:5432/envio_seguro?sslmode=disable"
+    ports:
+      - "9188:9187"
+    depends_on:
+      pg-standby:
+        condition: service_started
+    restart: unless-stopped
+
+  # Base de datos de series de tiempo (LXC-04)
+  victoriametrics:
+    image: docker.io/victoriametrics/victoria-metrics:latest
+    container_name: victoriametrics
+    ports:
+      - "8428:8428"
+    volumes:
+      - ./monitoring/victoriametrics/scrape.yml:/etc/victoriametrics/scrape.yml:ro
+      - vm_data:/victoria-metrics-data
+    command:
+      - "-promscrape.config=/etc/victoriametrics/scrape.yml"
+      - "-storageDataPath=/victoria-metrics-data"
+      - "-retentionPeriod=1"
+    restart: unless-stopped
+
+  # Servidor de tableros de visualización (LXC-04)
+  grafana:
+    image: docker.io/grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - victoriametrics
+    restart: unless-stopped
+
   app:
     build:
       context: .
@@ -70,4 +128,8 @@ volumes:
   pg_wal_archive:
     driver: local
   pg_standby_data:
+    driver: local
+  vm_data:
+    driver: local
+  grafana_data:
     driver: local
