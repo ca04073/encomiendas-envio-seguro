@@ -256,6 +256,9 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- 6. CUENTAS NOMINALES Y MAPEO DE SUCURSAL PARA PRUEBAS
 -- ---------------------------------------------------------------------
 DO $crear_usuarios$
+DECLARE
+    v_id_ss INT;
+    v_id_sa INT;
 BEGIN
     -- 1. Operador de San Salvador (Sucursal 1)
     IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'usr_operador_ss') THEN
@@ -272,10 +275,19 @@ BEGIN
         CREATE USER usr_auditor_fiscal WITH PASSWORD 'AuditorFiscal123!' IN ROLE rol_auditor INHERIT;
     END IF;
 
-    -- Asignar usuarios a sus sucursales correspondientes
-    INSERT INTO seguridad.usuario_sucursal (usuario, id_sucursal)
-    VALUES 
-        ('usr_operador_ss', 1), -- Sucursal San Salvador
-        ('usr_operador_sa', 2)  -- Sucursal Santa Ana
-    ON CONFLICT DO NOTHING;
+    -- Asignar usuarios si las sucursales ya existen en este momento
+    SELECT id_sucursal INTO v_id_ss FROM public.sucursal WHERE codigo_establecimiento = '0001' OR id_sucursal = 1 ORDER BY id_sucursal LIMIT 1;
+    SELECT id_sucursal INTO v_id_sa FROM public.sucursal WHERE codigo_establecimiento = '0002' OR id_sucursal = 2 ORDER BY id_sucursal LIMIT 1;
+
+    IF v_id_ss IS NOT NULL THEN
+        INSERT INTO seguridad.usuario_sucursal (usuario, id_sucursal)
+        VALUES ('usr_operador_ss', v_id_ss)
+        ON CONFLICT DO NOTHING;
+    END IF;
+
+    IF v_id_sa IS NOT NULL THEN
+        INSERT INTO seguridad.usuario_sucursal (usuario, id_sucursal)
+        VALUES ('usr_operador_sa', v_id_sa)
+        ON CONFLICT DO NOTHING;
+    END IF;
 END $crear_usuarios$;

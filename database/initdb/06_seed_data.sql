@@ -801,3 +801,29 @@ WHERE connamespace = 'public'::regnamespace
 ORDER BY conrelid::regclass::TEXT, contype, conname;
 
 -- Fin de carga y auditoria. Las consultas anteriores son de solo lectura.
+
+-- ---------------------------------------------------------------------
+-- Mapeo automatico de operadores de prueba para RLS (si el esquema existe)
+-- ---------------------------------------------------------------------
+DO $$
+DECLARE
+    v_id_ss INT;
+    v_id_sa INT;
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_catalog.pg_tables WHERE schemaname = 'seguridad' AND tablename = 'usuario_sucursal') THEN
+        SELECT id_sucursal INTO v_id_ss FROM public.sucursal WHERE codigo_establecimiento = '0001' OR id_sucursal = 1 ORDER BY id_sucursal LIMIT 1;
+        SELECT id_sucursal INTO v_id_sa FROM public.sucursal WHERE codigo_establecimiento = '0002' OR id_sucursal = 2 ORDER BY id_sucursal LIMIT 1;
+
+        IF v_id_ss IS NOT NULL AND EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'usr_operador_ss') THEN
+            INSERT INTO seguridad.usuario_sucursal (usuario, id_sucursal)
+            VALUES ('usr_operador_ss', v_id_ss)
+            ON CONFLICT DO NOTHING;
+        END IF;
+
+        IF v_id_sa IS NOT NULL AND EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'usr_operador_sa') THEN
+            INSERT INTO seguridad.usuario_sucursal (usuario, id_sucursal)
+            VALUES ('usr_operador_sa', v_id_sa)
+            ON CONFLICT DO NOTHING;
+        END IF;
+    END IF;
+END $$;
