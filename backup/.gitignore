@@ -1,0 +1,9 @@
+# Ignorar archivos de respaldo generados y bitácoras
+storage/logico/*
+!storage/logico/.gitkeep
+storage/fisico/*
+!storage/fisico/.gitkeep
+storage/globales/*
+!storage/globales/.gitkeep
+logs/*.log
+!logs/.gitkeep
