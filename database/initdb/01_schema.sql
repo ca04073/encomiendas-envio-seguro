@@ -204,13 +204,14 @@ CREATE TABLE asignacion_ruta (
 );
 
 CREATE TABLE evento_rastreo (
-    id_evento     INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_evento     INT GENERATED ALWAYS AS IDENTITY,
     id_encomienda INT NOT NULL,
     id_estado     INT NOT NULL,
     id_sucursal   INT NOT NULL,
     id_empleado   INT,
     fecha_hora    TIMESTAMP NOT NULL DEFAULT NOW(),
     observacion   VARCHAR(200),
+    PRIMARY KEY (id_evento, fecha_hora),
     CONSTRAINT fk_evento_encomienda
         FOREIGN KEY (id_encomienda) REFERENCES encomienda (id_encomienda),
     CONSTRAINT fk_evento_estado
@@ -219,7 +220,7 @@ CREATE TABLE evento_rastreo (
         FOREIGN KEY (id_sucursal) REFERENCES sucursal (id_sucursal),
     CONSTRAINT fk_evento_empleado
         FOREIGN KEY (id_empleado) REFERENCES empleado (id_empleado)
-);
+) PARTITION BY RANGE (fecha_hora);
 
 -- =====================================================================
 -- BLOQUE 4: Cobros
