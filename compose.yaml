@@ -1,4 +1,28 @@
 services:
+  pg-primary:
+    image: docker.io/library/postgres:17-alpine
+    container_name: pg-primary
+    environment:
+      POSTGRES_DB: envio_seguro
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_primary_data:/var/lib/postgresql/data
+      - pg_wal_archive:/var/lib/postgresql/wal_archive
+      - ./database/initdb:/docker-entrypoint-initdb.d:ro
+      - ./database/config/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ./database/config/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "hba_file=/etc/postgresql/pg_hba.conf"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d envio_seguro"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   app:
     build:
       context: .
@@ -9,6 +33,14 @@ services:
       - "8080:8080"
     environment:
       - PORT=8080
-    env_file:
-      - .env
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD:-postgres}@pg-primary:5432/envio_seguro
+    depends_on:
+      pg-primary:
+        condition: service_healthy
     restart: unless-stopped
+
+volumes:
+  pg_primary_data:
+    driver: local
+  pg_wal_archive:
+    driver: local
