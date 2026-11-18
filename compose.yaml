@@ -23,6 +23,31 @@ services:
       timeout: 5s
       retries: 5
 
+  pg-standby:
+    image: docker.io/library/postgres:17-alpine
+    container_name: pg-standby
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_standby_data:/var/lib/postgresql/data
+    depends_on:
+      pg-primary:
+        condition: service_healthy
+    restart: unless-stopped
+    entrypoint: >
+      sh -c "
+      if [ ! -s /var/lib/postgresql/data/pgdata/PG_VERSION ]; then
+        echo '=== [pg-standby] Clonando nodo primario mediante pg_basebackup ===' &&
+        PGPASSWORD=ReplPasswordSeguro123 pg_basebackup -h pg-primary -p 5432 -U replicator -D /var/lib/postgresql/data/pgdata -F p -X stream -R -P &&
+        chmod 700 /var/lib/postgresql/data/pgdata
+      fi &&
+      echo '=== [pg-standby] Iniciando PostgreSQL en modo Hot Standby (Read-Only) ===' &&
+      exec docker-entrypoint.sh postgres
+      "
+
   app:
     build:
       context: .
@@ -43,4 +68,6 @@ volumes:
   pg_primary_data:
     driver: local
   pg_wal_archive:
+    driver: local
+  pg_standby_data:
     driver: local
