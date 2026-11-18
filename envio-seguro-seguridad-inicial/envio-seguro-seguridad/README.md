@@ -6,9 +6,10 @@ datos **ENVÍO-SEGURO** mediante PostgreSQL 17.
 
 > **Estado:** los scripts `07_probar_permisos_roles.sql` y
 > `08_auditoria_final_seguridad.sql` se ejecutaron sin errores de
-> ejecución. Esto no equivale, por sí solo, a certificar que todos los
-> controles estén correctamente configurados: deben revisarse los
-> resultados y las observaciones que produzcan.
+> ejecución. Además, pgAudit 17.1 quedó instalado en el servidor, la
+> extensión fue creada en `envio_seguro` y se configuraron las clases
+> `READ`, `WRITE`, `DDL` y `ROLE`. La generación, revisión, rotación y
+> conservación de los registros todavía deben validarse.
 
 ## Estructura
 
@@ -28,6 +29,8 @@ envio-seguro-seguridad/
 │   ├── 06_crear_estructura_seguridad.sql
 │   ├── 07_probar_permisos_roles.sql
 │   └── 08_auditoria_final_seguridad.sql
+├── configuracion/
+│   └── postgresql.conf.example
 ├── .gitignore
 └── README.md
 ```
@@ -41,7 +44,7 @@ Organizar los controles de seguridad de la base de datos en torno a:
 -   **Mínimo privilegio:** conceder únicamente las operaciones
     necesarias para cada función.
 -   **Auditoría:** inspeccionar usuarios, roles, membresías y
-    privilegios efectivos.
+    privilegios efectivos; registrar actividad SQL mediante pgAudit.
 -   **Separación de funciones:** distinguir administración, operación,
     auditoría y respaldo.
 -   **Preparación para seguridad por filas:** disponer de estructuras
@@ -165,6 +168,76 @@ psql -U postgres -d envio_seguro -f "C:/ruta/al/proyecto/scripts/00_verificar_en
 Usar rutas con `/` en los comandos de `psql` en Windows evita problemas
 de interpretación de las barras invertidas.
 
+## Auditoría de actividad con pgAudit
+
+El proyecto incorpora pgAudit 17.1 sobre PostgreSQL 17. La configuración
+actual de la instancia registra las clases `READ`, `WRITE`, `DDL` y
+`ROLE`. La extensión `pgaudit` está creada en la base `envio_seguro`.
+
+La implementación requiere dos niveles de configuración:
+
+1. **Servidor:** instalar el binario compatible con PostgreSQL 17,
+   agregar `pgaudit` a `shared_preload_libraries` en
+   `postgresql.conf` y reiniciar el servicio. El archivo
+   `configuracion/postgresql.conf.example` documenta la directiva; no
+   debe reemplazarse una lista de bibliotecas existente sin conservar
+   sus elementos.
+2. **Base de datos/instancia:** ejecutar
+   `scripts/09_configurar_pgaudit.sql` conectado a `envio_seguro` con
+   una cuenta administrativa. El script crea la extensión y configura
+   las clases de auditoría mediante `ALTER SYSTEM`.
+
+`ALTER SYSTEM` modifica la configuración de la instancia PostgreSQL,
+por lo que el valor de `pgaudit.log` puede afectar a otras bases de
+datos alojadas en el mismo servidor. `CREATE EXTENSION` sí se realiza
+por cada base de datos en la que se requiera pgAudit.
+
+La opción `pgaudit.log_parameter` se mantiene desactivada para reducir
+el riesgo de registrar valores sensibles de parámetros. Los eventos se
+emiten al sistema de logging de PostgreSQL; por tanto, deben comprobarse
+los archivos de log, definir rotación y retención, restringir su acceso
+y, para auditoría independiente, remitir copias a un destino externo
+protegido. La instalación de `pgaudit.dll` y los archivos de extensión
+se realiza en el servidor y no se versiona en Git.
+
+### Verificación
+
+En `psql`, conectado a `envio_seguro`, ejecutar:
+
+```sql
+SELECT extname, extversion
+FROM pg_extension
+WHERE extname = 'pgaudit';
+
+SHOW shared_preload_libraries;
+SHOW pgaudit.log;
+SHOW pgaudit.log_parameter;
+
+SELECT name, setting
+FROM pg_settings
+WHERE name LIKE 'pgaudit.%'
+ORDER BY name;
+```
+
+La verificación funcional debe incluir una operación de prueba no
+destructiva con una cuenta controlada y la comprobación del evento
+correspondiente en el log de PostgreSQL. La mera existencia de la
+extensión o el valor de `pgaudit.log` no demuestra que los archivos se
+estén conservando ni que sean inmutables.
+
+### Reversión de la clase de auditoría
+
+Para desactivar las clases configuradas mediante `ALTER SYSTEM`:
+
+```sql
+ALTER SYSTEM RESET pgaudit.log;
+SELECT pg_reload_conf();
+```
+
+Esto elimina el valor establecido en `postgresql.auto.conf`; el
+comportamiento resultante dependerá de cualquier valor definido en
+`postgresql.conf` u otra fuente de configuración.
+
 ## Auditoría sin modificar los datos
 
 Los scripts de auditoría y prueba deben tratarse como herramientas de
@@ -247,6 +320,8 @@ scripts finalicen sin errores. Como mínimo, conservar evidencia de:
 
 -   `docs/manual-seguridad.md` --- procedimiento operativo y
     metodología.
+-   `configuracion/postgresql.conf.example` --- ejemplo mínimo de carga
+    de pgAudit en el servidor.
 -   `docs/decisiones-seguridad.md` --- decisiones de diseño.
 -   `docs/diccionario de permisos de usuarios.md` --- detalle de
     permisos por función.
