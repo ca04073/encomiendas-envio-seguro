@@ -1,0 +1,8 @@
+# ENVÍO-SEGURO - ejemplo de configuración de pgAudit
+# PostgreSQL 17 / pgAudit 17.x
+#
+# Agregar esta biblioteca a la lista existente. Si ya hay otras
+# bibliotecas precargadas, conservarlas separadas por comas.
+# Esta modificación requiere reiniciar el servicio PostgreSQL.
+
+shared_preload_libraries = 'pgaudit'

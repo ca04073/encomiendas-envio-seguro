@@ -77,6 +77,10 @@ puede alterarlos.
   `08_auditoria_final_seguridad.sql`    Auditoría final según las
                                         comprobaciones implementadas en el
                                         archivo.
+
+  `09_configurar_pgaudit.sql`           Crea la extensión pgAudit en la
+                                        base conectada y configura las
+                                        clases de auditoría de la instancia.
   -------------------------------------------------------------------------
 
 La descripción es funcional y debe contrastarse con el contenido vigente
@@ -151,6 +155,112 @@ También se puede ejecutar desde la terminal:
 ``` text
 psql -U postgres -d envio_seguro -f "C:/Users/usuario/ruta/proyecto/scripts/01_crear_roles.sql"
 ```
+
+## 5.2 Instalación y configuración de pgAudit
+
+### Requisitos
+
+- PostgreSQL 17.
+- Binarios de pgAudit compilados para la versión principal de PostgreSQL
+  instalada y para la plataforma del servidor. En este proyecto se
+  instaló pgAudit 17.1.
+- Permisos administrativos del sistema operativo para copiar los
+  archivos de extensión al directorio de instalación de PostgreSQL.
+- Permisos de superusuario PostgreSQL para la configuración inicial
+  descrita en el script.
+
+### Instalación en el servidor Windows
+
+La instalación del componente binario no se realiza desde SQL. Se deben
+colocar `pgaudit.dll` en el directorio `lib` de PostgreSQL 17 y los
+archivos `pgaudit.control` y `pgaudit--*.sql` en
+`share/extension`. Utilizar únicamente un paquete compatible con la
+versión mayor del servidor.
+
+Editar `postgresql.conf` y agregar `pgaudit` a
+`shared_preload_libraries`. Ejemplo mínimo:
+
+```ini
+shared_preload_libraries = 'pgaudit'
+```
+
+Si ya existen otras bibliotecas en esa lista, conservarlas separadas por
+comas; no sustituirlas. Reiniciar el servicio PostgreSQL 17 para que la
+biblioteca se cargue. El archivo
+`configuracion/postgresql.conf.example` contiene la directiva de
+referencia, no una configuración completa del servidor.
+
+### Crear la extensión y activar clases de auditoría
+
+Conectarse a la base de datos que se desea auditar y ejecutar como
+administrador:
+
+```text
+psql -p 5437 -h localhost -U postgres -d envio_seguro
+```
+
+Después ejecutar:
+
+```text
+\i C:/ruta/al/proyecto/scripts/09_configurar_pgaudit.sql
+```
+
+El script crea `pgaudit` en la base conectada y establece mediante
+`ALTER SYSTEM` las clases `READ`, `WRITE`, `DDL` y `ROLE`. Esta opción
+es de ámbito de instancia, no exclusivamente de la base conectada.
+`CREATE EXTENSION` debe ejecutarse en cada base de datos donde se
+requiera la extensión.
+
+En el entorno de desarrollo de ENVÍO-SEGURO se confirmó:
+
+- PostgreSQL Server 17.11.
+- pgAudit 17.1.
+- Extensión `pgaudit` creada en `envio_seguro`.
+- `pgaudit.log = 'READ, WRITE, DDL, ROLE'`.
+- `pg_reload_conf()` devolvió `true`.
+- `pgaudit.log_parameter` se mantiene en `off`.
+
+### Verificación funcional y registros
+
+Ejecutar en `psql`:
+
+```sql
+SELECT extname, extversion
+FROM pg_extension
+WHERE extname = 'pgaudit';
+
+SHOW shared_preload_libraries;
+SHOW pgaudit.log;
+SHOW pgaudit.log_parameter;
+
+SELECT name, setting
+FROM pg_settings
+WHERE name LIKE 'pgaudit.%'
+ORDER BY name;
+```
+
+Luego realizar una consulta y una operación controlada de prueba con una
+cuenta no privilegiada, y revisar el log generado por PostgreSQL. No
+utilizar operaciones destructivas sobre datos reales para probar la
+auditoría. La generación efectiva, rotación, retención, respaldo y
+remisión externa de los logs deben comprobarse por separado.
+
+No habilitar `pgaudit.log_parameter` sin evaluar antes el riesgo de
+registrar datos personales, credenciales u otros valores sensibles.
+Mantener los archivos de log fuera del repositorio Git.
+
+### Revertir la configuración de clases
+
+```sql
+ALTER SYSTEM RESET pgaudit.log;
+SELECT pg_reload_conf();
+```
+
+La reversión elimina el valor establecido en `postgresql.auto.conf`;
+comprobar si existe otra definición en `postgresql.conf`. Para retirar
+completamente pgAudit del servidor se requiere un procedimiento
+administrativo adicional y un reinicio; no basta con eliminar la
+extensión de una base de datos.
 
 ## 6. Gestión segura de contraseñas
 
@@ -286,8 +396,8 @@ la detección de sus propias acciones.
 -   Revisar periódicamente las membresías y atributos de roles.
 -   Registrar cambios de autenticación, roles, membresías, `GRANT` y
     `REVOKE`, cambios de políticas RLS y DDL relevante.
--   Configurar el registro de actividad de PostgreSQL y evaluar
-    `pgAudit` según los requisitos del entorno.
+-   Utilizar pgAudit para las clases configuradas (`READ`, `WRITE`,
+    `DDL` y `ROLE`) y verificar periódicamente los eventos emitidos.
 -   Enviar los registros a un servidor o servicio externo con controles
     de acceso y retención independientes.
 -   Alertar sobre cambios administrativos inesperados.
@@ -393,6 +503,12 @@ Según el estado de trabajo documentado:
 -   Se configuró una matriz de permisos por rol.
 -   Se crearon estructuras auxiliares de seguridad y funciones
     `SECURITY DEFINER`.
+-   pgAudit 17.1 está instalado en el servidor PostgreSQL 17; la
+    extensión está creada en `envio_seguro` y las clases `READ`,
+    `WRITE`, `DDL` y `ROLE` fueron configuradas mediante `ALTER SYSTEM`.
+-   La opción `pgaudit.log_parameter` permanece desactivada. La revisión
+    de eventos reales en los logs, así como la rotación, retención y
+    remisión externa, permanecen pendientes de validación.
 -   Los scripts `07_probar_permisos_roles.sql` y
     `08_auditoria_final_seguridad.sql` se ejecutaron sin errores de
     ejecución.
