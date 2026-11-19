@@ -39,6 +39,7 @@ services:
       - "5433:5432"
     volumes:
       - pg_standby_data:/var/lib/postgresql/data
+      - ./database/certs/standby:/var/lib/postgresql/certs:ro
     depends_on:
       pg-primary:
         condition: service_healthy
